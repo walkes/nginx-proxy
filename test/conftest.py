@@ -29,9 +29,9 @@ docker_client = docker.from_env()
 
 
 ###############################################################################
-# 
+#
 # utilities
-# 
+#
 ###############################################################################
 
 @contextlib.contextmanager
@@ -55,7 +55,7 @@ def ipv6(force_ipv6=True):
 
 class requests_for_docker(object):
     """
-    Proxy for calling methods of the requests module. 
+    Proxy for calling methods of the requests module.
     When a HTTP response failed due to HTTP Error 404 or 502, retry a few times.
     Provides method `get_conf` to extract the nginx-proxy configuration content.
     """
@@ -204,7 +204,7 @@ def docker_container_dns_resolver(domain_name):
 
     ip = container_ip(container)
     log.info("resolving domain name %r as IP address %s of container %s" % (domain_name, ip, container.name))
-    return ip 
+    return ip
 
 
 def monkey_patch_urllib_dns_resolver():
@@ -278,7 +278,7 @@ def docker_compose_down(compose_file='docker-compose.yml'):
 
 def wait_for_nginxproxy_to_be_ready():
     """
-    If one (and only one) container started from image jwilder/nginx-proxy:test is found, 
+    If one (and only one) container started from image jwilder/nginx-proxy:test is found,
     wait for its log to contain substring "Watching docker events"
     """
     containers = docker_client.containers.list(filters={"ancestor": "jwilder/nginx-proxy:test"})
@@ -383,18 +383,18 @@ def connect_to_all_networks():
 
 
 ###############################################################################
-# 
+#
 # Py.test fixtures
-# 
+#
 ###############################################################################
 
 @pytest.yield_fixture(scope="module")
 def docker_compose(request):
     """
     pytest fixture providing containers described in a docker compose file. After the tests, remove the created containers
-    
+
     A custom docker compose file name can be defined in a variable named `docker_compose_file`.
-    
+
     Also, in the case where pytest is running from a docker container, this fixture makes sure
     our container will be attached to all the docker networks.
     """
@@ -430,9 +430,9 @@ def nginxproxy():
 
 
 ###############################################################################
-# 
+#
 # Py.test hooks
-# 
+#
 ###############################################################################
 
 # pytest hook to display additionnal stuff in test report
@@ -447,9 +447,9 @@ def pytest_runtest_logreport(report):
 
 
 ###############################################################################
-# 
+#
 # Check requirements
-# 
+#
 ###############################################################################
 
 try:
@@ -457,5 +457,5 @@ try:
 except docker.errors.ImageNotFound:
     pytest.exit("The docker image 'jwilder/nginx-proxy:test' is missing")
 
-if docker.__version__ != "2.0.2":
-    pytest.exit("This test suite is meant to work with the python docker module v2.0.2")
+if docker.__version__ != "2.7.0":
+    pytest.exit("This test suite is meant to work with the python docker module v2.7.0")
